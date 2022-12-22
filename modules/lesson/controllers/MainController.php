@@ -78,6 +78,16 @@ class MainController extends Controller
      */
     public function actionView($id)
     {   
+        if($this->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $viewed = new Viewed();
+            $data = Yii::$app->request->post();
+            $viewed->lid = $id;
+            $viewed->uid = Yii::$app->user->identity->id;
+            if($viewed->save()){
+                return ['success' => true];
+            }
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -137,20 +147,6 @@ class MainController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    public function actionViewed($id)
-    {
-        $model = new Viewed();
-        if (Yii::$app->request->isPost) {
-            $data = Yii::$app->request->post();
-            $model->lid = $id;
-            $model->uid = Yii::$app->user->identity->id;
-            if($model->save()) {
-                return $this->redirect(['index']);
-            }
-        }
-        return $this->render(['view', 'id' => $id]);
     }
 
     /**

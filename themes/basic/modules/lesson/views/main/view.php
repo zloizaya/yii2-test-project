@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use lesha724\youtubewidget\Youtube;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var app\modules\lesson\models\Lesson $model */
@@ -11,8 +12,20 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app.lesson', 'Lessons'), 'u
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $class = $model->lessonViewed($model->id, Yii::$app->user->identity->id);
+
+$this->registerJs('
+$("#viewed").click(function () {
+    $.ajax({
+        url: "'.\yii\helpers\Url::toRoute(['/lesson/main/view','id'=>$model->id]).'",
+        dataType: "html",
+        success: function() {
+            document.location.href="/lesson";
+        }
+    });
+});
+');
 ?>
-<div class="lesson-view">
+<div class="lesson-view" id="view">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php if(Yii::$app->user->can('updateLesson')): ?>
     <p>
@@ -86,10 +99,8 @@ $class = $model->lessonViewed($model->id, Yii::$app->user->identity->id);
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2">
-            <?= Html::beginForm(['/lesson/main/viewed', 'id' => $model->id], 'post') ?>
-            <?= Html::submitButton(Yii::t('app.lesson', 'Next video'), ['class' => 'btn btn-success ' . $class, 'name' => 'viewed']) ?>
-            <?= Html::endForm() ?>
+        <div class="col-md-2" id="viewedblock">
+            <?= Html::button(Yii::t('app.lesson', 'Next video'), ['class' => 'btn btn-success ' . $class, 'id' => 'viewed']) ?>
         </div>
     </div>
 </div>
