@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=f73613ai.beget.tech;dbname=f73613ai_lesson',
-    'username' => 'f73613ai_lesson',
-    'password' => 'L1zZI*Qd',
+    'dsn' => 'mysql:host=localhost;dbname=name',
+    'username' => 'root',
+    'password' => '',
     'charset' => 'utf8',
     'tablePrefix' => 'les_',
 
